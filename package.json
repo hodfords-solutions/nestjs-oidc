@@ -76,6 +76,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
+    "@nestjs/platform-express": "^10.3.10",
     "bcrypt": "^5.1.1",
     "nanoid": "^5.0.7",
     "oidc-provider": "^8.5.1"
