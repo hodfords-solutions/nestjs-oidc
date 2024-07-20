@@ -1,24 +1,25 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { OIDC_CONFIGURATION } from '../constants/injector.constant';
-import { nanoid } from 'nanoid';
-import Provider from 'oidc-provider';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class OidcService implements OnApplicationBootstrap {
     private configuration: Record<string, any>;
-    private provider: Provider;
+    private provider: any;
 
     constructor(private moduleRef: ModuleRef) {
-        console.log('-----------');
         this.configuration = this.moduleRef.get(OIDC_CONFIGURATION, { strict: false });
     }
 
-    get providerInstance(): Provider {
+    get providerInstance(): any {
         return this.provider;
     }
 
-    onApplicationBootstrap() {
+    async onApplicationBootstrap() {
+        const oidcProvider = await (eval(`import('oidc-provider')`) as Promise<typeof import('oidc-provider')>);
+        const Provider = oidcProvider.default;
+
         this.provider = new Provider(this.configuration.issuer, this.configuration);
 
         const parameters = [
@@ -45,9 +46,9 @@ export class OidcService implements OnApplicationBootstrap {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         const { AccessToken, Session, Grant, IdToken } = ctx.oidc.provider;
 
-        const sessionId = nanoid(10);
+        const sessionId = randomUUID();
         const loginTs = Math.floor(Date.now() / 1000);
-        const accountId = nanoid();
+        const accountId = randomUUID();
         const account = await ctx.oidc.provider.Account.findAccount(ctx, accountId);
 
         ctx.oidc.entity('Account', account);
@@ -67,7 +68,7 @@ export class OidcService implements OnApplicationBootstrap {
         const grantId = await grant.save();
         session.authorizations = {
             foo: {
-                sid: nanoid(),
+                sid: randomUUID(),
                 grantId
             }
         };

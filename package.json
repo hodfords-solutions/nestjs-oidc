@@ -78,7 +78,7 @@
   "dependencies": {
     "@nestjs/platform-express": "^10.3.10",
     "bcrypt": "^5.1.1",
-    "nanoid": "^5.0.7",
+    "nanoid": "^3.3.4",
     "oidc-provider": "^8.5.1"
   }
 }
