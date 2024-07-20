@@ -1,20 +1,18 @@
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
 import { randomUUID } from 'crypto';
 import { IAccountService } from 'libs/interfaces/account-service.interface';
-import { OIDC_ACCOUNT_SERVICE, OIDC_CONFIGURATION } from '../constants/injector.constant';
+import { OIDC_ACCOUNT_SERVICE, OIDC_ADAPTER_REDIS_HOST, OIDC_CONFIGURATION } from '../constants/injector.constant';
+import { RedisAdapter } from 'libs/adapters/redis.adapter';
 
 @Injectable()
 export class OidcService implements OnApplicationBootstrap {
-    private configuration: Record<string, any>;
     private provider: any;
 
     constructor(
-        private moduleRef: ModuleRef,
-        @Inject(OIDC_ACCOUNT_SERVICE) private oidcAccountService: IAccountService
-    ) {
-        this.configuration = this.moduleRef.get(OIDC_CONFIGURATION, { strict: false });
-    }
+        @Inject(OIDC_CONFIGURATION) private configuration: Record<string, any>,
+        @Inject(OIDC_ACCOUNT_SERVICE) private oidcAccountService: IAccountService,
+        @Inject(OIDC_ADAPTER_REDIS_HOST) private redisHost: string
+    ) {}
 
     get providerInstance(): any {
         return this.provider;
@@ -49,7 +47,12 @@ export class OidcService implements OnApplicationBootstrap {
 
         this.configuration.findAccount = this.oidcAccountService.findAccount.bind(this.oidcAccountService);
 
-        this.provider = new Provider(this.configuration.issuer, this.configuration);
+        this.provider = new Provider(this.configuration.issuer, {
+            ...this.configuration,
+            adapter: (name: string) => {
+                return new RedisAdapter(name, this.redisHost);
+            }
+        });
     }
 
     private async passwordGrant(ctx: any, next: any) {

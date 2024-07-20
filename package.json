@@ -25,6 +25,7 @@
     "@nestjs/core": "10.3.1",
     "@types/bcrypt": "^5.0.2",
     "@types/jest": "29.5.11",
+    "@types/lodash.isempty": "^4.4.9",
     "@types/node": "20.11.10",
     "@types/oidc-provider": "^8.5.1",
     "@typescript-eslint/eslint-plugin": "6.20.0",
@@ -78,6 +79,8 @@
   "dependencies": {
     "@nestjs/platform-express": "^10.3.10",
     "bcrypt": "^5.1.1",
+    "ioredis": "^5.4.1",
+    "lodash.isempty": "^4.4.0",
     "nanoid": "^3.3.4",
     "oidc-provider": "^8.5.1"
   }
