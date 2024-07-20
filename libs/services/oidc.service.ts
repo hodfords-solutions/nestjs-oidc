@@ -1,14 +1,18 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { OIDC_CONFIGURATION } from '../constants/injector.constant';
 import { randomUUID } from 'crypto';
+import { IAccountService } from 'libs/interfaces/account-service.interface';
+import { OIDC_ACCOUNT_SERVICE, OIDC_CONFIGURATION } from '../constants/injector.constant';
 
 @Injectable()
 export class OidcService implements OnApplicationBootstrap {
     private configuration: Record<string, any>;
     private provider: any;
 
-    constructor(private moduleRef: ModuleRef) {
+    constructor(
+        private moduleRef: ModuleRef,
+        @Inject(OIDC_ACCOUNT_SERVICE) private oidcAccountService: IAccountService
+    ) {
         this.configuration = this.moduleRef.get(OIDC_CONFIGURATION, { strict: false });
     }
 
@@ -17,10 +21,7 @@ export class OidcService implements OnApplicationBootstrap {
     }
 
     async onApplicationBootstrap() {
-        const oidcProvider = await (eval(`import('oidc-provider')`) as Promise<typeof import('oidc-provider')>);
-        const Provider = oidcProvider.default;
-
-        this.provider = new Provider(this.configuration.issuer, this.configuration);
+        await this.initProvider();
 
         const parameters = [
             'audience',
@@ -40,6 +41,15 @@ export class OidcService implements OnApplicationBootstrap {
             parameters,
             allowedDuplicateParameters
         );
+    }
+
+    private async initProvider() {
+        const oidcProvider = await (eval(`import('oidc-provider')`) as Promise<typeof import('oidc-provider')>);
+        const Provider = oidcProvider.default;
+
+        this.configuration.findAccount = this.oidcAccountService.findAccount.bind(this.oidcAccountService);
+
+        this.provider = new Provider(this.configuration.issuer, this.configuration);
     }
 
     private async passwordGrant(ctx: any, next: any) {

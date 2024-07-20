@@ -5,7 +5,9 @@ export interface IAccount {
 
     get accountId(): string;
 
+    get claims(): any;
+
     findByEmail(email: string): Promise<IAccount>;
 
-    claims(): any;
+    findById(id: string): Promise<IAccount>;
 }
