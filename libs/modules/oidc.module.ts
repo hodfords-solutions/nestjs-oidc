@@ -4,7 +4,7 @@ import { OidcController } from '../controllers/oidc.controller';
 import { OidcService } from '../services/oidc.service';
 
 export class OidcModule {
-    public static forRoot(configuration: Record<string, any>, account: any): DynamicModule {
+    public static forRoot(configuration: Record<string, any>, accountServiceClass: any): DynamicModule {
         return {
             module: OidcModule,
             providers: [
@@ -14,7 +14,7 @@ export class OidcModule {
                 },
                 {
                     provide: OIDC_ACCOUNT_SERVICE,
-                    useValue: account
+                    useClass: accountServiceClass
                 },
                 OidcService
             ],

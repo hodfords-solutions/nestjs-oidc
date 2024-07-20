@@ -53,13 +53,14 @@ export class OidcService implements OnApplicationBootstrap {
     }
 
     private async passwordGrant(ctx: any, next: any) {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         const { AccessToken, Session, Grant, IdToken } = ctx.oidc.provider;
 
         const sessionId = randomUUID();
         const loginTs = Math.floor(Date.now() / 1000);
         const accountId = randomUUID();
-        const account = await ctx.oidc.provider.Account.findAccount(ctx, accountId);
+        const { username, password } = ctx.oidc.body;
+
+        const account = await this.oidcAccountService.authenticate(username, password);
 
         ctx.oidc.entity('Account', account);
 
@@ -86,7 +87,7 @@ export class OidcService implements OnApplicationBootstrap {
         const at = new AccessToken({
             accountId,
             client: ctx.oidc.client,
-            expiresWithSession: '123',
+            expiresWithSession: true,
             grantId,
             sessionUid: session.uid
         });
@@ -112,7 +113,7 @@ export class OidcService implements OnApplicationBootstrap {
 
         ctx.body = {
             access_token: accessToken,
-            expires_in: 3600,
+            expires_in: at.expiration,
             id_token: idToken,
             refresh_token: 'refresh_token',
             scope: 'openid email',

@@ -1,15 +1,28 @@
 import { IAccountService, OidcModule } from '@mint/nestjs-oidc';
 import { Injectable, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 class AccountService implements IAccountService {
-    findAccount(ctx: any, id: string): Promise<any> {
+    findAccount(_ctx: any, id: string): Promise<any> {
         return Promise.resolve({
             accountId: id,
             async claims() {
                 return {
                     sub: id,
+                    email: 'minh@gmail.com'
+                };
+            }
+        });
+    }
+
+    authenticate(): Promise<any> {
+        return Promise.resolve({
+            accountId: randomUUID(),
+            async claims() {
+                return {
+                    sub: randomUUID(),
                     email: 'minh@gmail.com'
                 };
             }
@@ -25,6 +38,15 @@ class AccountService implements IAccountService {
                 claims: {
                     email: ['email', 'email_verified'],
                     profile: ['name']
+                },
+                ttl: {
+                    AccessToken: 60 * 60, // 1 hour
+                    AuthorizationCode: 60 * 10, // 10 minutes
+                    IdToken: 60 * 60, // 1 hour
+                    RefreshToken: 60 * 60 * 24 * 14 // 14 days
+                },
+                cookies: {
+                    keys: ['foo']
                 },
                 clients: [
                     {
@@ -49,7 +71,7 @@ class AccountService implements IAccountService {
                     required: () => false
                 }
             },
-            new AccountService()
+            AccountService
         )
     ],
     providers: [],
