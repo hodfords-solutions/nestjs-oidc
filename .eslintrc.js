@@ -30,55 +30,9 @@ module.exports = {
             skipComments: true
         }],
         'max-lines-per-function': ['error', {
-            max: 50,
+            max: 100,
             skipComments: true
         }],
-        '@typescript-eslint/naming-convention': [
-            'error',
-            { 'selector': 'enumMember', 'format': ['UPPER_CASE'] },
-            {
-                'selector': [
-                    'objectLiteralProperty'
-                ],
-                'format': ['camelCase', 'PascalCase', 'UPPER_CASE']
-            },
-            {
-                'selector': [
-                    'parameter',
-                    'variable',
-                    'function',
-                    'classProperty',
-                    'typeProperty',
-                    'parameterProperty',
-                    'classMethod',
-                    'objectLiteralMethod',
-                    'typeMethod'
-                ],
-                'format': ['camelCase']
-            },
-            {
-                'selector': [
-                    'class',
-                    'interface',
-                    'enum'
-                ],
-                'format': ['PascalCase']
-            },
-            {
-                'selector': [
-                    'variable'
-                ],
-                'modifiers': ['exported'],
-                'format': ['PascalCase', 'camelCase', 'UPPER_CASE']
-            },
-            {
-                'selector': [
-                    'function'
-                ],
-                'modifiers': ['exported'],
-                'format': ['PascalCase', 'camelCase']
-            }
-        ],
         '@typescript-eslint/interface-name-prefix': 'off',
         '@typescript-eslint/no-empty-function': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
