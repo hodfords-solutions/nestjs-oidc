@@ -1,13 +1,7 @@
+import { AccountClaimsType } from '../types/account.type';
+
 export interface IAccount {
-    email: string;
+    accountId: string;
 
-    [key: string]: any;
-
-    get accountId(): string;
-
-    get claims(): any;
-
-    findByEmail(email: string): Promise<IAccount>;
-
-    findById(id: string): Promise<IAccount>;
+    claims(): Promise<AccountClaimsType>;
 }

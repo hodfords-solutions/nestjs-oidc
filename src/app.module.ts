@@ -1,7 +1,5 @@
 import { IAccountService, OidcModule } from '@mint/nestjs-oidc';
 import { Injectable, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { randomUUID } from 'crypto';
 
 @Injectable()
 class AccountService implements IAccountService {
@@ -10,7 +8,7 @@ class AccountService implements IAccountService {
             accountId: id,
             async claims() {
                 return {
-                    sub: 'admin-123',
+                    sub: '84b779c9-08d7-424e-9484-529582b99288',
                     email: 'minh_1@gmail.com',
                     name: 'John Doe (Mint)',
                     nickname: 'john.doe (mint)',
@@ -30,10 +28,10 @@ class AccountService implements IAccountService {
 
     authenticate(): Promise<any> {
         return Promise.resolve({
-            accountId: randomUUID(),
+            accountId: '84b779c9-08d7-424e-9484-529582b99288',
             async claims() {
                 return {
-                    sub: randomUUID(),
+                    sub: '84b779c9-08d7-424e-9484-529582b99288',
                     email: 'minh@gmail.com'
                 };
             }
@@ -55,9 +53,6 @@ const configuration = {
         Interaction: 60 * 60, // 1 hour
         Session: 60 * 60 * 24 * 14 // 14 days
     },
-    cookies: {
-        keys: ['foo']
-    },
     clients: [
         {
             client_id: 'foo',
@@ -69,27 +64,14 @@ const configuration = {
                 'https://8b3d-2a09-bac5-d5ca-15f-00-23-2e0.ngrok-free.app/auth/oidc.callback'
             ],
             response_types: ['code id_token', 'code'],
-            grant_types: ['authorization_code', 'implicit', 'password']
+            grant_types: ['authorization_code', 'implicit']
         }
-    ],
-    features: {
-        revocation: {
-            enabled: true
-        },
-        devInteractions: {
-            enabled: false
-        },
-        jwtUserinfo: { enabled: true },
-        userinfo: { enabled: true }
-    },
-    pkce: {
-        required: () => false
-    }
+    ]
 };
 
 @Module({
-    imports: [OidcModule.forRoot(configuration, AccountService, 'localhost:6379')],
+    imports: [OidcModule.forRoot(configuration, AccountService, 'localhost:6379', 'http://localhost:3001/signin')],
     providers: [],
-    controllers: [AppController]
+    controllers: []
 })
 export class AppModule {}
