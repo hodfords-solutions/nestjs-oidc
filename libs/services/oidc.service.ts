@@ -44,11 +44,58 @@ export class OidcService implements OnApplicationBootstrap {
     private async initProvider() {
         const oidcProvider = await (eval(`import('oidc-provider')`) as Promise<typeof import('oidc-provider')>);
         const Provider = oidcProvider.default;
+        const policy = oidcProvider.interactionPolicy;
+
+        const interactions = policy.base();
+        interactions.add(
+            new policy.Prompt({
+                name: 'signin',
+                requestable: true
+            })
+        );
 
         this.configuration.findAccount = this.oidcAccountService.findAccount.bind(this.oidcAccountService);
 
         this.provider = new Provider(this.configuration.issuer, {
             ...this.configuration,
+            interactions: {
+                policy: interactions,
+                url(_ctx: any, interaction: any) {
+                    return `http://localhost:3001/signin/${interaction.uid}`;
+                }
+            },
+
+            loadExistingGrant: (ctx: any) => {
+                const grantId =
+                    ctx.oidc.result?.consent?.grantId || ctx.oidc.session.grantIdFor(ctx.oidc.client.clientId);
+                console.log('loadExistingGrant', ctx.oidc.result, ctx.oidc.session);
+
+                if (grantId) {
+                    return ctx.oidc.provider.Grant.find(grantId);
+                }
+                return undefined;
+            },
+            cookies: {
+                keys: ['ewdewdewdewdewdwd', 'dewdewdwedwedwedewd', 'dwedwedwdwd'],
+                long: {
+                    signed: true,
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'none'
+                },
+                short: {
+                    signed: true,
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: 'none'
+                },
+                names: {
+                    session: '_session',
+                    interaction: '_interaction',
+                    resume: '_resume',
+                    state: '_state'
+                }
+            },
             adapter: (name: string) => {
                 return new RedisAdapter(name, this.redisHost);
             }

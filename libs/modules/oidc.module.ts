@@ -26,7 +26,8 @@ export class OidcModule {
                 },
                 OidcService
             ],
-            controllers: [OidcController]
+            controllers: [OidcController],
+            exports: [OidcService]
         };
     }
 }
