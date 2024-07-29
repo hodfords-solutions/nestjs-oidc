@@ -2,7 +2,7 @@ import { Controller, Post, Res, Req, HttpStatus } from '@nestjs/common';
 import { OidcAuthService } from '../services/oidc-auth.service';
 import { Request, Response } from 'express';
 
-@Controller()
+@Controller('oidc-auth')
 export class OidcAuthController {
     constructor(private oidcAuthService: OidcAuthService) {}
 
