@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { RedisAdapter } from 'libs/adapters/redis.adapter';
-import { IAccountService } from 'libs/interfaces/account-service.interface';
+import { RedisAdapter } from '../adapters/redis.adapter';
+import { IAccountService } from '../interfaces/account-service.interface';
 import {
     OIDC_ACCOUNT_SERVICE,
     OIDC_ADAPTER_REDIS_HOST,

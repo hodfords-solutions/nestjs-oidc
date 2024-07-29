@@ -1,5 +1,5 @@
 import { Controller, Post, Res, Req, HttpStatus } from '@nestjs/common';
-import { OidcAuthService } from 'libs/services/oidc-auth.service';
+import { OidcAuthService } from '../services/oidc-auth.service';
 import { Request, Response } from 'express';
 
 @Controller()
