@@ -89,6 +89,8 @@ export class OidcService implements OnApplicationBootstrap {
             },
             ...this.configuration
         });
+
+        this.provider.proxy = true;
     }
 
     private interactionConfig(policy: any) {
