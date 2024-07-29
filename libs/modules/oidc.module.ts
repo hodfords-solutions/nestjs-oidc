@@ -1,20 +1,17 @@
-import { DynamicModule, Type } from '@nestjs/common';
+import { DynamicModule } from '@nestjs/common';
 import {
-    OIDC_ACCOUNT_SERVICE,
     OIDC_ADAPTER_REDIS_HOST,
     OIDC_CONFIGURATION,
     OIDC_CUSTOM_INTERACTION_URL
 } from '../constants/injector.constant';
-import { OidcController } from '../controllers/oidc.controller';
-import { OidcService } from '../services/oidc.service';
-import { OidcAuthService } from '../services/oidc-auth.service';
-import { IAccountService } from '../interfaces/account-service.interface';
 import { OidcAuthController } from '../controllers/oidc-auth.controller';
+import { OidcController } from '../controllers/oidc.controller';
+import { OidcAuthService } from '../services/oidc-auth.service';
+import { OidcService } from '../services/oidc.service';
 
 export class OidcModule {
     public static forRoot(
         configuration: Record<string, any>,
-        accountServiceClass: Type<IAccountService>,
         redisHost: string,
         customInteractionUrl: string
     ): DynamicModule {
@@ -24,10 +21,6 @@ export class OidcModule {
                 {
                     provide: OIDC_CONFIGURATION,
                     useValue: configuration
-                },
-                {
-                    provide: OIDC_ACCOUNT_SERVICE,
-                    useClass: accountServiceClass
                 },
                 {
                     provide: OIDC_ADAPTER_REDIS_HOST,

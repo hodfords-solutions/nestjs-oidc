@@ -7,16 +7,18 @@ import {
     OIDC_CONFIGURATION,
     OIDC_CUSTOM_INTERACTION_URL
 } from '../constants/injector.constant';
+import { ModuleRef } from '@nestjs/core';
 
 @Injectable()
 export class OidcService implements OnApplicationBootstrap {
     private provider: any;
+    private oidcAccountService: IAccountService;
 
     constructor(
         @Inject(OIDC_CONFIGURATION) private configuration: Record<string, any>,
-        @Inject(OIDC_ACCOUNT_SERVICE) private oidcAccountService: IAccountService,
         @Inject(OIDC_ADAPTER_REDIS_HOST) private redisHost: string,
-        @Inject(OIDC_CUSTOM_INTERACTION_URL) private customInteractionUrl: string
+        @Inject(OIDC_CUSTOM_INTERACTION_URL) private customInteractionUrl: string,
+        private moduleRef: ModuleRef
     ) {}
 
     get providerInstance(): any {
@@ -24,6 +26,19 @@ export class OidcService implements OnApplicationBootstrap {
     }
 
     async onApplicationBootstrap() {
+        this.oidcAccountService = this.moduleRef.get<IAccountService>(OIDC_ACCOUNT_SERVICE, { strict: false });
+        if (!this.oidcAccountService) {
+            throw new Error(`
+                OIDC_ACCOUNT_SERVICE not found.
+                Please provide a service that implements IAccountService interface.
+                And inject by
+                {
+                    provide: OIDC_ACCOUNT_SERVICE,
+                    useClass: YourAccountService
+                }
+            `);
+        }
+
         await this.initProvider();
     }
 

@@ -1,15 +1,22 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { OIDC_ACCOUNT_SERVICE } from '../constants/injector.constant';
 import { IAccountService } from '../interfaces/account-service.interface';
 import { OidcService } from './oidc.service';
 
 @Injectable()
-export class OidcAuthService {
+export class OidcAuthService implements OnApplicationBootstrap {
+    private oidcAccountService: IAccountService;
+
     constructor(
         private oidcService: OidcService,
-        @Inject(OIDC_ACCOUNT_SERVICE) private oidcAccountService: IAccountService
+        private moduleRef: ModuleRef
     ) {}
+
+    onApplicationBootstrap() {
+        this.oidcAccountService = this.moduleRef.get<IAccountService>(OIDC_ACCOUNT_SERVICE, { strict: false });
+    }
 
     async signIn(req: Request, res: Response): Promise<string> {
         const provider = this.oidcService.providerInstance;

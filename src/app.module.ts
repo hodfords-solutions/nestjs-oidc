@@ -1,8 +1,12 @@
-import { IAccountService, OidcModule } from '@mint/nestjs-oidc';
+import { IAccountService, OIDC_ACCOUNT_SERVICE, OidcModule } from '@mint/nestjs-oidc';
 import { Injectable, Module } from '@nestjs/common';
+
+class UserService {}
 
 @Injectable()
 class AccountService implements IAccountService {
+    constructor(private userService: UserService) {}
+
     findAccount(_ctx: any, id: string): Promise<any> {
         return Promise.resolve({
             accountId: id,
@@ -70,8 +74,14 @@ const configuration = {
 };
 
 @Module({
-    imports: [OidcModule.forRoot(configuration, AccountService, 'localhost:6379', 'http://localhost:3001/signin')],
-    providers: [],
+    imports: [OidcModule.forRoot(configuration, 'localhost:6379', 'http://localhost:3001/signin')],
+    providers: [
+        UserService,
+        {
+            provide: OIDC_ACCOUNT_SERVICE,
+            useClass: AccountService
+        }
+    ],
     controllers: []
 })
 export class AppModule {}
