@@ -4,7 +4,6 @@ import {
     OIDC_CONFIGURATION,
     OIDC_CUSTOM_INTERACTION_URL
 } from '../constants/injector.constant';
-import { OidcAuthController } from '../controllers/oidc-auth.controller';
 import { OidcController } from '../controllers/oidc.controller';
 import { OidcAuthService } from '../services/oidc-auth.service';
 import { OidcService } from '../services/oidc.service';
@@ -33,7 +32,7 @@ export class OidcModule {
                 OidcService,
                 OidcAuthService
             ],
-            controllers: [OidcController, OidcAuthController],
+            controllers: [OidcController],
             exports: [OidcService, OidcAuthService]
         };
     }
