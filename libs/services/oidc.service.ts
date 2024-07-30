@@ -17,7 +17,8 @@ export class OidcService implements OnApplicationBootstrap {
     constructor(
         @Inject(OIDC_CONFIGURATION) private configuration: Record<string, any>,
         @Inject(OIDC_ADAPTER_REDIS_HOST) private redisHost: string,
-        @Inject(OIDC_CUSTOM_INTERACTION_URL) private customInteractionUrl: string,
+        @Inject(OIDC_CUSTOM_INTERACTION_URL)
+        private customInteractionUrl: (uid: string) => string | string,
         private moduleRef: ModuleRef
     ) {}
 
@@ -100,7 +101,10 @@ export class OidcService implements OnApplicationBootstrap {
         return {
             policy: interactions,
             url(_ctx: any, interaction: any) {
-                return `${customInteractionUrl}/${interaction.uid}`;
+                if (typeof customInteractionUrl === 'string') {
+                    return `${customInteractionUrl}?uid=${interaction.uid}`;
+                }
+                return customInteractionUrl(interaction.uid);
             }
         };
     }

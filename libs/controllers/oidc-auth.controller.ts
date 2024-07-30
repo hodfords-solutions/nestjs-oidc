@@ -1,7 +1,7 @@
 import { Controller, Post, Res, Req, HttpStatus } from '@nestjs/common';
 import { OidcAuthService } from '../services/oidc-auth.service';
 import { Request, Response } from 'express';
-import { OidcPromptEnums } from 'libs/enums/odic.constant';
+import { OidcPromptEnums } from '../enums/odic.constant';
 
 @Controller('oidc-auth')
 export class OidcAuthController {
