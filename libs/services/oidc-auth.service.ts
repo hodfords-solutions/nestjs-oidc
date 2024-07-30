@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { OIDC_ACCOUNT_SERVICE } from '../constants/injector.constant';
 import { IAccountService } from '../interfaces/account-service.interface';
 import { OidcService } from './oidc.service';
+import { OidcPromptEnums } from '../enums/odic.constant';
 
 @Injectable()
 export class OidcAuthService implements OnApplicationBootstrap {
@@ -103,6 +104,16 @@ export class OidcAuthService implements OnApplicationBootstrap {
         const interactionDetails = await provider.interactionDetails(req, res);
 
         return interactionDetails.result?.login?.accountId;
+    }
+
+    async getCurrentPrompt(req: Request, res: Response): Promise<OidcPromptEnums> {
+        const provider = this.oidcService.providerInstance;
+        const interactionDetails = await provider.interactionDetails(req, res);
+        const {
+            prompt: { name }
+        } = interactionDetails;
+
+        return name as OidcPromptEnums;
     }
 
     private async findOrCreateGrant(provider: any, accountId: string, clientId: string, details: any) {
