@@ -13,7 +13,7 @@ export class OidcModule {
     public static forRoot(
         configuration: Record<string, any>,
         redisHost: string,
-        customInteractionUrl: (uid: string) => string | string
+        customInteractionUrl: string | ((uid: string) => string)
     ): DynamicModule {
         return {
             module: OidcModule,
