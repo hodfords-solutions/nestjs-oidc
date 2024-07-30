@@ -1,6 +1,7 @@
 import { Controller, Post, Res, Req, HttpStatus } from '@nestjs/common';
 import { OidcAuthService } from '../services/oidc-auth.service';
 import { Request, Response } from 'express';
+import { OidcPromptEnums } from 'libs/enums/odic.constant';
 
 @Controller('oidc-auth')
 export class OidcAuthController {
@@ -11,7 +12,7 @@ export class OidcAuthController {
         const redirectTo = await this.oidcAuthService.signIn(req, res);
 
         return res.status(HttpStatus.OK).json({
-            nextPrompt: 'consent',
+            nextPrompt: OidcPromptEnums.CONSENT,
             redirectTo
         });
     }
@@ -21,6 +22,7 @@ export class OidcAuthController {
         const redirectTo = await this.oidcAuthService.confirmConsent(req, res);
 
         return res.status(HttpStatus.OK).json({
+            nextPrompt: OidcPromptEnums.CALLBACK,
             redirectTo
         });
     }

@@ -31,9 +31,14 @@ export class OidcAuthService implements OnApplicationBootstrap {
         const { username, password } = req.body;
         const account = await this.oidcAccountService.authenticate(username, password);
 
+        return this.authenticateForConsent(account.accountId, req, res);
+    }
+
+    async authenticateForConsent(accountId: string, req: Request, res: Response): Promise<string> {
+        const provider = this.oidcService.providerInstance;
         const loginResult = {
             login: {
-                accountId: account.accountId
+                accountId
             }
         };
 
