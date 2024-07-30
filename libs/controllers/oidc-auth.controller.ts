@@ -9,21 +9,21 @@ export class OidcAuthController {
 
     @Post('signin/:uid')
     async signIn(@Req() req: Request, @Res() res: Response) {
-        const redirectTo = await this.oidcAuthService.signIn(req, res);
+        const redirectUrl = await this.oidcAuthService.signIn(req, res);
 
         return res.status(HttpStatus.OK).json({
             nextPrompt: OidcPromptEnums.CONSENT,
-            redirectTo
+            redirectUrl
         });
     }
 
     @Post('consent/:uid/confirm')
     async confirmConsent(@Req() req: Request, @Res() res: Response) {
-        const redirectTo = await this.oidcAuthService.confirmConsent(req, res);
+        const redirectUrl = await this.oidcAuthService.confirmConsent(req, res);
 
         return res.status(HttpStatus.OK).json({
             nextPrompt: OidcPromptEnums.CALLBACK,
-            redirectTo
+            redirectUrl
         });
     }
 }

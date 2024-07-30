@@ -24,10 +24,10 @@ export class AppController {
         const grantId = await this.createGrant(provider, accountId, details);
         Object.assign(result, { consent: { grantId } });
 
-        const redirectTo = await provider.interactionResult(req, res, result, { mergeWithLastSubmission: true });
+        const redirectUrl = await provider.interactionResult(req, res, result, { mergeWithLastSubmission: true });
 
         return res.send({
-            redirectTo
+            redirectUrl
         });
     }
 

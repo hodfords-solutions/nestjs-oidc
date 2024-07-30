@@ -34,19 +34,6 @@ export class OidcAuthService implements OnApplicationBootstrap {
         return this.authenticateForConsent(account.accountId, req, res);
     }
 
-    async authenticateForConsent(accountId: string, req: Request, res: Response): Promise<string> {
-        const provider = this.oidcService.providerInstance;
-        const loginResult = {
-            login: {
-                accountId
-            }
-        };
-
-        const redirectTo = await provider.interactionResult(req, res, loginResult, { mergeWithLastSubmission: true });
-
-        return redirectTo;
-    }
-
     async confirmConsent(req: Request, res: Response): Promise<string> {
         const provider = this.oidcService.providerInstance;
         const interactionDetails = await provider.interactionDetails(req, res);
@@ -66,10 +53,19 @@ export class OidcAuthService implements OnApplicationBootstrap {
             }
         };
 
-        const redirectTo = await provider.interactionResult(req, res, consentResult, { mergeWithLastSubmission: true });
-
-        return redirectTo;
+        return provider.interactionResult(req, res, consentResult, { mergeWithLastSubmission: true });
     }
+
+    async abortConsent(req: Request, res: Response): Promise<string> {
+        const provider = this.oidcService.providerInstance;
+        const errorResult = {
+            error: 'access_denied',
+            error_description: 'End-User aborted interaction'
+        };
+
+        return provider.interactionResult(req, res, errorResult, { mergeWithLastSubmission: false });
+    }
+
     private async createGrant(provider: any, accountId: string, details: any) {
         const { params } = details;
         const grant = await this.findOrCreateGrant(provider, accountId, params.client_id, details);
@@ -89,6 +85,24 @@ export class OidcAuthService implements OnApplicationBootstrap {
         }
 
         return await grant.save();
+    }
+
+    async authenticateForConsent(accountId: string, req: Request, res: Response): Promise<string> {
+        const provider = this.oidcService.providerInstance;
+        const loginResult = {
+            login: {
+                accountId
+            }
+        };
+
+        return provider.interactionResult(req, res, loginResult, { mergeWithLastSubmission: true });
+    }
+
+    async currentUser(req: Request, res: Response): Promise<string> {
+        const provider = this.oidcService.providerInstance;
+        const interactionDetails = await provider.interactionDetails(req, res);
+
+        return interactionDetails.result?.login?.accountId;
     }
 
     private async findOrCreateGrant(provider: any, accountId: string, clientId: string, details: any) {
