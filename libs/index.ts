@@ -4,3 +4,4 @@ export * from './interfaces/account-service.interface';
 export * from './services/oidc.service';
 export * from './services/oidc-auth.service';
 export * from './constants/injector.constant';
+export * from './enums/odic.constant';
