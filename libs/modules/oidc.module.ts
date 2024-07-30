@@ -34,7 +34,7 @@ export class OidcModule {
                 OidcAuthService
             ],
             controllers: [OidcController, OidcAuthController],
-            exports: [OidcService]
+            exports: [OidcService, OidcAuthService]
         };
     }
 }
