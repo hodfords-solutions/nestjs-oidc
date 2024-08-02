@@ -60,11 +60,13 @@ export class OidcService implements OnApplicationBootstrap {
                     signed: true,
                     httpOnly: true,
                     path: '/',
+                    secure: true,
                     sameSite: 'none'
                 },
                 short: {
                     signed: true,
                     httpOnly: true,
+                    secure: true,
                     path: '/',
                     sameSite: 'none'
                 },
