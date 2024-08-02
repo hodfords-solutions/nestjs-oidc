@@ -58,14 +58,14 @@ export class OidcService implements OnApplicationBootstrap {
                 keys: ['interaction', 'session', 'state'],
                 long: {
                     signed: true,
-                    httpOnly: true,
+                    httpOnly: false,
                     path: '/',
                     secure: true,
                     sameSite: 'none'
                 },
                 short: {
                     signed: true,
-                    httpOnly: true,
+                    httpOnly: false,
                     secure: true,
                     path: '/',
                     sameSite: 'none'
