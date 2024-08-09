@@ -1,5 +1,6 @@
 import { IAccountService, OIDC_ACCOUNT_SERVICE, OidcModule } from '@mint/nestjs-oidc';
 import { Injectable, Module } from '@nestjs/common';
+import { AppController } from './app.controller';
 
 class UserService {}
 
@@ -70,7 +71,32 @@ const configuration = {
             response_types: ['code id_token', 'code'],
             grant_types: ['authorization_code', 'implicit']
         }
-    ]
+    ],
+    cookies: {
+        keys: ['interaction', 'session', 'state'],
+        long: {
+            signed: true,
+            httpOnly: true,
+            secure: false,
+            sameSite: 'none',
+            path: '/'
+            // domain: env.OIDC_PROVIDER.SUB_DOMAIN
+        },
+        short: {
+            signed: true,
+            httpOnly: true,
+            secure: false,
+            sameSite: 'none',
+            path: '/'
+            // domain: env.OIDC_PROVIDER.SUB_DOMAIN
+        },
+        names: {
+            session: '_session',
+            interaction: '_interaction',
+            resume: '_resume',
+            state: '_state'
+        }
+    }
 };
 
 @Module({
@@ -82,6 +108,6 @@ const configuration = {
             useClass: AccountService
         }
     ],
-    controllers: []
+    controllers: [AppController]
 })
 export class AppModule {}

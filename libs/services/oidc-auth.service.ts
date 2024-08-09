@@ -67,9 +67,12 @@ export class OidcAuthService implements OnApplicationBootstrap {
         return provider.interactionResult(req, res, errorResult, { mergeWithLastSubmission: false });
     }
 
-    private async createGrant(provider: any, accountId: string, details: any) {
-        const { params } = details;
-        const grant = await this.findOrCreateGrant(provider, accountId, params.client_id, details);
+    private async createGrant(provider: any, accountId: string, interactionDetails: any) {
+        const {
+            params,
+            prompt: { details }
+        } = interactionDetails;
+        const grant = await this.findOrCreateGrant(provider, accountId, params.client_id, interactionDetails);
 
         grant.addOIDCScope('openid');
 

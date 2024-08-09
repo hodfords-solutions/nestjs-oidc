@@ -31,8 +31,11 @@ export class AppController {
         });
     }
 
-    private async createGrant(provider: any, accountId: string, details: any) {
-        let { grantId } = details;
+    private async createGrant(provider: any, accountId: string, interactionDetails: any) {
+        let {
+            grantId,
+            prompt: { details }
+        } = interactionDetails;
         let grant: any;
         if (grantId) {
             // we'll be modifying existing grant in existing session
