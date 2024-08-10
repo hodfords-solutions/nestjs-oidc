@@ -109,6 +109,15 @@ export class OidcAuthService implements OnApplicationBootstrap {
         return interactionDetails.result?.login?.accountId;
     }
 
+    async signOut(req: Request, res: Response): Promise<void> {
+        const provider = this.oidcService.providerInstance;
+        const session = await provider.Session.get(req, res);
+
+        if (session) {
+            await session.destroy();
+        }
+    }
+
     async getCurrentPrompt(req: Request, res: Response): Promise<OidcPromptEnums> {
         const provider = this.oidcService.providerInstance;
         const interactionDetails = await provider.interactionDetails(req, res);
