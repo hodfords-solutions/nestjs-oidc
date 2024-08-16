@@ -1,10 +1,14 @@
-import { OidcService } from '@mint/nestjs-oidc';
+import { OidcAuthService, OidcService } from '@mint/nestjs-oidc';
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
+import { Request } from 'express';
 
 @Controller()
 export class AppController {
-    constructor(private oidcService: OidcService) {}
+    constructor(
+        private oidcService: OidcService,
+        private oidcAuthService: OidcAuthService
+    ) {}
 
     @Get()
     hello(): string {
@@ -29,6 +33,13 @@ export class AppController {
         return res.send({
             redirectUrl
         });
+    }
+
+    @Post('oidc-auth/sign-out/:id')
+    async signOut(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+        await this.oidcAuthService.signOut(req, res);
+
+        return {};
     }
 
     private async createGrant(provider: any, accountId: string, interactionDetails: any) {

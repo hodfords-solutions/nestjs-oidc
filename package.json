@@ -1,6 +1,6 @@
 {
   "name": "@hodfords/nestjs-oidc",
-  "version": "10.1.7",
+  "version": "10.1.8",
   "description": "NestJS OIDC Provider",
   "license": "MIT",
   "readmeFilename": "README.md",

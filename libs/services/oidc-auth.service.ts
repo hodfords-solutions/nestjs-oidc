@@ -111,11 +111,16 @@ export class OidcAuthService implements OnApplicationBootstrap {
 
     async signOut(req: Request, res: Response): Promise<void> {
         const provider = this.oidcService.providerInstance;
-        const session = await provider.Session.get(req, res);
+        const ctx = this.oidcService.createContext(req, res);
 
-        if (session) {
-            await session.destroy();
-        }
+        const session = await provider.Session.get(ctx);
+
+        await this.backchannelSignOut(session);
+        await this.revokeTokens(ctx, session);
+
+        await session.destroy();
+
+        this.oidcService.emitEndSessionSuccess(ctx);
     }
 
     async getCurrentPrompt(req: Request, res: Response): Promise<OidcPromptEnums> {
@@ -126,6 +131,52 @@ export class OidcAuthService implements OnApplicationBootstrap {
         } = interactionDetails;
 
         return name as OidcPromptEnums;
+    }
+
+    private async revokeTokens(ctx: any, session: any) {
+        if (!session.authorizations) {
+            return;
+        }
+
+        await Promise.all(
+            Object.entries(session.authorizations).map(async ([clientId, { grantId }]: any) => {
+                if (grantId && !session.authorizationFor(clientId).persistsLogout) {
+                    const client = await this.oidcService.providerInstance.Client.find(clientId);
+                    ctx.oidc.entity('Client', client);
+
+                    await this.oidcService.revokeFunction(ctx, grantId);
+                }
+            })
+        );
+
+        await session.destroy();
+    }
+
+    private async backchannelSignOut(session: any) {
+        const clientIds = Object.keys(session.authorizations || {});
+
+        const back = [];
+        for (const clientId of clientIds) {
+            const client = await this.oidcService.providerInstance.Client.find(clientId);
+            if (!client) {
+                continue;
+            }
+
+            const { accountId } = session;
+            const sid = session.sidFor(client.clientId);
+            back.push(
+                client.backchannelLogout(accountId, sid).then(
+                    () => {
+                        this.oidcService.providerInstance.emit('backchannel.success', client, accountId, sid);
+                    },
+                    (err: Error) => {
+                        this.oidcService.providerInstance.emit('backchannel.error', err, client, accountId, sid);
+                    }
+                )
+            );
+        }
+
+        await Promise.all(back);
     }
 
     private async findOrCreateGrant(provider: any, accountId: string, clientId: string, details: any) {

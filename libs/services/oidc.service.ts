@@ -13,6 +13,7 @@ import { ModuleRef } from '@nestjs/core';
 export class OidcService implements OnApplicationBootstrap {
     private provider: any;
     private oidcAccountService: IAccountService;
+    private revokeFnc: (ctx: any, grantId: string) => Promise<void>;
 
     constructor(
         @Inject(OIDC_CONFIGURATION) private configuration: Record<string, any>,
@@ -24,6 +25,10 @@ export class OidcService implements OnApplicationBootstrap {
 
     get providerInstance(): any {
         return this.provider;
+    }
+
+    get revokeFunction(): (ctx: any, grantId: string) => Promise<void> {
+        return this.revokeFnc;
     }
 
     async onApplicationBootstrap() {
@@ -94,6 +99,8 @@ export class OidcService implements OnApplicationBootstrap {
         });
 
         this.provider.proxy = true;
+
+        await this.loadRevokeFnc();
     }
 
     private interactionConfig(policy: any) {
@@ -109,5 +116,23 @@ export class OidcService implements OnApplicationBootstrap {
                 return customInteractionUrl(interaction.uid);
             }
         };
+    }
+
+    private async loadRevokeFnc(): Promise<void> {
+        const revokeFnc = await eval(`import('oidc-provider/lib/helpers/revoke.js')`);
+
+        this.revokeFnc = revokeFnc.default;
+    }
+
+    public createContext(req: any, res: any) {
+        const provider = this.providerInstance;
+        const ctx = provider.app.createContext(req, res);
+        ctx.oidc = new provider.OIDCContext(ctx);
+
+        return ctx;
+    }
+
+    public emitEndSessionSuccess(ctx: any) {
+        ctx.oidc.provider.emit('end_session.success', ctx);
     }
 }
