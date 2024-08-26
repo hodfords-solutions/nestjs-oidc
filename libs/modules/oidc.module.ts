@@ -1,4 +1,4 @@
-import { DynamicModule } from '@nestjs/common';
+import { DynamicModule, Provider } from '@nestjs/common';
 import {
     OIDC_ADAPTER_REDIS_HOST,
     OIDC_CONFIGURATION,
@@ -7,31 +7,45 @@ import {
 import { OidcController } from '../controllers/oidc.controller';
 import { OidcAuthService } from '../services/oidc-auth.service';
 import { OidcService } from '../services/oidc.service';
+import { ModuleAsyncOptions } from 'libs/types/module-async-options.type';
 
 export class OidcModule {
-    public static forRoot(
-        configuration: Record<string, any>,
-        redisHost: string,
-        customInteractionUrl: string | ((uid: string) => string)
-    ): DynamicModule {
+    public static forRootAync(options: ModuleAsyncOptions): DynamicModule {
+        const redisHost = options.redisHost;
+        const customInteractionUrl = options.customInteractionUrl;
+
+        const providers: Provider[] = [
+            {
+                provide: OIDC_ADAPTER_REDIS_HOST,
+                useValue: redisHost
+            },
+            {
+                provide: OIDC_CUSTOM_INTERACTION_URL,
+                useValue: customInteractionUrl
+            },
+            OidcService,
+            OidcAuthService
+        ];
+
+        if (options.configuration?.useFactory) {
+            providers.push({
+                provide: OIDC_CONFIGURATION,
+                useFactory: options.configuration.useFactory,
+                inject: options.configuration.inject
+            });
+        } else {
+            providers.push({
+                provide: OIDC_CONFIGURATION,
+                useValue: options.configuration
+            });
+        }
+
+        const imports = options.configuration?.imports || [];
+
         return {
             module: OidcModule,
-            providers: [
-                {
-                    provide: OIDC_CONFIGURATION,
-                    useValue: configuration
-                },
-                {
-                    provide: OIDC_ADAPTER_REDIS_HOST,
-                    useValue: redisHost
-                },
-                {
-                    provide: OIDC_CUSTOM_INTERACTION_URL,
-                    useValue: customInteractionUrl
-                },
-                OidcService,
-                OidcAuthService
-            ],
+            providers,
+            imports,
             controllers: [OidcController],
             exports: [OidcService, OidcAuthService]
         };

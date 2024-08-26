@@ -2,6 +2,7 @@ import { IAccountService, OIDC_ACCOUNT_SERVICE, OidcModule } from '@mint/nestjs-
 import { Injectable, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 
+@Injectable()
 class UserService {}
 
 @Injectable()
@@ -62,6 +63,7 @@ const configuration = {
         {
             client_id: 'foo',
             client_secret: 'bar',
+            post_logout_redirect_uris: ['https://google.com'],
             redirect_uris: [
                 'https://499a-2402-800-629c-eb7f-440f-c018-5084-c02.ngrok-free.app/test',
                 'https://oidcdebugger.com/debug',
@@ -99,8 +101,32 @@ const configuration = {
     }
 };
 
+@Injectable()
+class ConfigService {
+    getConfig() {
+        return configuration;
+    }
+}
+
 @Module({
-    imports: [OidcModule.forRoot(configuration, 'localhost:6379', 'http://localhost:3001/signin')],
+    providers: [ConfigService],
+    exports: [ConfigService]
+})
+class ConfigModule {}
+
+@Module({
+    imports: [
+        ConfigModule,
+        OidcModule.forRootAync({
+            redisHost: 'localhost',
+            customInteractionUrl: 'http://localhost:3000/interaction/{uid}',
+            configuration: {
+                useFactory: (configService: ConfigService) => configService.getConfig(),
+                inject: [ConfigService],
+                imports: [ConfigModule]
+            }
+        })
+    ],
     providers: [
         UserService,
         {
