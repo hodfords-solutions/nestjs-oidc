@@ -10,7 +10,7 @@ import { OidcService } from '../services/oidc.service';
 import { ModuleAsyncOptions } from '../types/module-async-options.type';
 
 export class OidcModule {
-    public static forRootAync(options: ModuleAsyncOptions): DynamicModule {
+    public static forRootAsync(options: ModuleAsyncOptions): DynamicModule {
         const redisHost = options.redisHost;
         const customInteractionUrl = options.customInteractionUrl;
 
