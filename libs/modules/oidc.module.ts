@@ -7,7 +7,7 @@ import {
 import { OidcController } from '../controllers/oidc.controller';
 import { OidcAuthService } from '../services/oidc-auth.service';
 import { OidcService } from '../services/oidc.service';
-import { ModuleAsyncOptions } from 'libs/types/module-async-options.type';
+import { ModuleAsyncOptions } from '../types/module-async-options.type';
 
 export class OidcModule {
     public static forRootAync(options: ModuleAsyncOptions): DynamicModule {
