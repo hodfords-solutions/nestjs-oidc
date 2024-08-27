@@ -133,6 +133,13 @@ export class OidcAuthService implements OnApplicationBootstrap {
         return name as OidcPromptEnums;
     }
 
+    async getCurrentClientId(req: Request, res: Response): Promise<string> {
+        const provider = this.oidcService.providerInstance;
+        const interactionDetails = await provider.interactionDetails(req, res);
+
+        return interactionDetails.params?.client_id;
+    }
+
     private async revokeTokens(ctx: any, session: any) {
         if (!session.authorizations) {
             return;

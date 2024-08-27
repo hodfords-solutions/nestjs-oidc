@@ -19,6 +19,7 @@ export class AppController {
     async signIn(@Req() req: Request, @Res() res: Response) {
         const provider = this.oidcService.providerInstance;
         const details = await provider.interactionDetails(req, res);
+        console.log('details', details);
         const accountId = 'ff0c6866-0796-45cb-a7ca-1f956d2c7e6a';
         const result = {
             login: {

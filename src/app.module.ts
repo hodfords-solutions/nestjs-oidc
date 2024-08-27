@@ -117,9 +117,9 @@ class ConfigModule {}
 @Module({
     imports: [
         ConfigModule,
-        OidcModule.forRootAync({
+        OidcModule.forRootAsync({
             redisHost: 'localhost',
-            customInteractionUrl: 'http://localhost:3000/interaction/{uid}',
+            customInteractionUrl: 'http://localhost:3001/interaction/{uid}',
             configuration: {
                 useFactory: (configService: ConfigService) => configService.getConfig(),
                 inject: [ConfigService],
