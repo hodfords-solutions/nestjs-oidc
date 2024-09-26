@@ -15,11 +15,11 @@
     "incremental": true
   },
   "include": [
-    "libs",
+    "lib",
   ],
   "exclude": [
     "tests",
-    "src",
+    "sample",
     "dist",
     "node_modules"
   ]

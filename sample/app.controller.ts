@@ -44,7 +44,7 @@ export class AppController {
     }
 
     private async createGrant(provider: any, accountId: string, interactionDetails: any) {
-        let {
+        const {
             grantId,
             prompt: { details }
         } = interactionDetails;

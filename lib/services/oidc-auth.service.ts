@@ -64,6 +64,7 @@ export class OidcAuthService implements OnApplicationBootstrap {
         const provider = this.oidcService.providerInstance;
         const errorResult = {
             error: 'access_denied',
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             error_description: 'End-User aborted interaction'
         };
 

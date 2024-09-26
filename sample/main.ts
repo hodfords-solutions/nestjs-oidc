@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-    app.use((_req: any, res: any, next: any) => {
+    app.use((req: any, res: any, next: any) => {
         // // Website you wish to allow to connect
         res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
 

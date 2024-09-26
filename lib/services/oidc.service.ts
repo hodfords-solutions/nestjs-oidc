@@ -50,11 +50,10 @@ export class OidcService implements OnApplicationBootstrap {
 
     private async initProvider() {
         const oidcProvider = await (eval(`import('oidc-provider')`) as Promise<typeof import('oidc-provider')>);
-        const Provider = oidcProvider.default;
         const policy = oidcProvider.interactionPolicy;
 
         this.configuration.findAccount = this.oidcAccountService.findAccount.bind(this.oidcAccountService);
-        this.provider = new Provider(this.configuration.issuer, {
+        this.provider = new oidcProvider.default(this.configuration.issuer, {
             interactions: this.interactionConfig(policy),
             adapter: (name: string) => {
                 return new RedisAdapter(name, this.redisHost);
@@ -83,12 +82,8 @@ export class OidcService implements OnApplicationBootstrap {
                 }
             },
             features: {
-                revocation: {
-                    enabled: true
-                },
-                devInteractions: {
-                    enabled: false
-                },
+                revocation: { enabled: true },
+                devInteractions: { enabled: false },
                 jwtUserinfo: { enabled: true },
                 userinfo: { enabled: true }
             },
@@ -99,7 +94,6 @@ export class OidcService implements OnApplicationBootstrap {
         });
 
         this.provider.proxy = true;
-
         await this.loadRevokeFnc();
     }
 
@@ -109,7 +103,7 @@ export class OidcService implements OnApplicationBootstrap {
 
         return {
             policy: interactions,
-            url(_ctx: any, interaction: any) {
+            url(ctx: any, interaction: any) {
                 if (typeof customInteractionUrl === 'string') {
                     return `${customInteractionUrl}?uid=${interaction.uid}`;
                 }
