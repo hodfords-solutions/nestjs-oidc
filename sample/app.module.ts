@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { IAccountService, OIDC_ACCOUNT_SERVICE, OidcModule } from '@mint/nestjs-oidc';
 import { Injectable, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -9,7 +10,7 @@ class UserService {}
 class AccountService implements IAccountService {
     constructor(private userService: UserService) {}
 
-    findAccount(_ctx: any, id: string): Promise<any> {
+    findAccount(ctx: any, id: string): Promise<any> {
         return Promise.resolve({
             accountId: id,
             async claims() {
