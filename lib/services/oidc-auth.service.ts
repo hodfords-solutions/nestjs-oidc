@@ -1,4 +1,4 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { BadRequestException, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { OIDC_ACCOUNT_SERVICE } from '../constants/injector.constant';
@@ -33,16 +33,16 @@ export class OidcAuthService implements OnApplicationBootstrap {
         const provider = this.oidcService.providerInstance;
         const interactionDetails = await provider.interactionDetails(req, res);
 
-        const accountId = interactionDetails.session.accountId;
+        const interactionResult = interactionDetails.result;
+        const accountId = interactionResult?.login?.accountId;
+        if (!accountId) {
+            throw new BadRequestException('No account id found');
+        }
+
         const grantId = await this.createGrant(provider, accountId, interactionDetails);
+        Object.assign(interactionResult, { consent: { grantId } });
 
-        const consentResult = {
-            consent: {
-                grantId
-            }
-        };
-
-        return provider.interactionResult(req, res, consentResult, { mergeWithLastSubmission: true });
+        return provider.interactionResult(req, res, interactionResult, { mergeWithLastSubmission: true });
     }
 
     async abortConsent(req: Request, res: Response): Promise<string> {

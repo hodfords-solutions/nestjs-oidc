@@ -17,19 +17,10 @@ export class AppController {
 
     @Post('signin/:uid')
     async signIn(@Req() req: Request, @Res() res: Response) {
-        const provider = this.oidcService.providerInstance;
-        const details = await provider.interactionDetails(req, res);
-        console.log('details', details);
         const accountId = 'ff0c6866-0796-45cb-a7ca-1f956d2c7e6a';
-        const result = {
-            login: {
-                accountId
-            }
-        };
-        const grantId = await this.createGrant(provider, accountId, details);
-        Object.assign(result, { consent: { grantId } });
 
-        const redirectUrl = await provider.interactionResult(req, res, result, { mergeWithLastSubmission: true });
+        await this.oidcAuthService.authenticateForConsent(accountId, req, res);
+        const redirectUrl = await this.oidcAuthService.confirmConsent(req, res);
 
         return res.send({
             redirectUrl
