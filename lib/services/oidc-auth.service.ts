@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { OIDC_ACCOUNT_SERVICE } from '../constants/injector.constant';
@@ -20,15 +20,6 @@ export class OidcAuthService implements OnApplicationBootstrap {
     }
 
     async signIn(req: Request, res: Response): Promise<string> {
-        const provider = this.oidcService.providerInstance;
-        const interactionDetails = await provider.interactionDetails(req, res);
-        const {
-            prompt: { name }
-        } = interactionDetails;
-        if (name !== 'login') {
-            throw new BadRequestException('expected a login prompt');
-        }
-
         const { username, password } = req.body;
         const account = await this.oidcAccountService.authenticate(req, res, {
             username,
@@ -41,12 +32,6 @@ export class OidcAuthService implements OnApplicationBootstrap {
     async confirmConsent(req: Request, res: Response): Promise<string> {
         const provider = this.oidcService.providerInstance;
         const interactionDetails = await provider.interactionDetails(req, res);
-        const {
-            prompt: { name }
-        } = interactionDetails;
-        if (name !== 'consent') {
-            throw new BadRequestException('expected a consent prompt');
-        }
 
         const accountId = interactionDetails.session.accountId;
         const grantId = await this.createGrant(provider, accountId, interactionDetails);
