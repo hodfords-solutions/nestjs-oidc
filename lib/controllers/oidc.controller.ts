@@ -6,7 +6,7 @@ import { OidcService } from '../services/oidc.service';
 export class OidcController {
     constructor(private oidcService: OidcService) {}
 
-    @All('/*')
+    @All('/{*splat}')
     mountedOidc(@Req() req: Request, @Res() res: Response): Promise<void> {
         req.url = req.originalUrl.replace('/oidc', '');
 

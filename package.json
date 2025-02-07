@@ -1,6 +1,6 @@
 {
   "name": "@hodfords/nestjs-oidc",
-  "version": "10.2.8",
+  "version": "11.0.0",
   "description": "NestJS OIDC Provider",
   "license": "MIT",
   "readmeFilename": "README.md",
@@ -21,29 +21,29 @@
     "oidc"
   ],
   "devDependencies": {
-    "@hodfords/nestjs-eslint-config": "^10.0.5",
-    "@hodfords/nestjs-prettier-config": "^10.0.1",
-    "@nestjs/common": "10.4.4",
-    "@nestjs/core": "10.4.4",
+    "@hodfords/nestjs-eslint-config": "^11.0.0",
+    "@hodfords/nestjs-prettier-config": "^11.0.0",
+    "@nestjs/common": "11.0.8",
+    "@nestjs/core": "11.0.8",
     "@types/bcrypt": "^5.0.2",
-    "@types/jest": "29.5.13",
+    "@types/jest": "29.5.14",
     "@types/lodash.isempty": "^4.4.9",
-    "@types/node": "22.7.2",
+    "@types/node": "22.13.1",
     "@types/oidc-provider": "8.5.2",
-    "cspell": "8.14.4",
-    "eslint": "9.11.1",
-    "husky": "9.1.6",
-    "is-ci": "3.0.1",
+    "cspell": "8.17.3",
+    "eslint": "9.20.0",
+    "husky": "9.1.7",
+    "is-ci": "4.1.0",
     "jest": "29.7.0",
-    "lint-staged": "15.2.10",
+    "lint-staged": "15.4.3",
     "lodash": "4.17.21",
-    "openid-client": "5.7.0",
-    "prettier": "3.3.3",
+    "openid-client": "6.1.7",
+    "prettier": "3.5.0",
     "reflect-metadata": "0.2.2",
     "rimraf": "6.0.1",
     "ts-jest": "29.2.5",
     "ts-node": "10.9.2",
-    "typescript": "5.6.2"
+    "typescript": "5.7.3"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -77,9 +77,9 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@nestjs/platform-express": "10.4.4",
-    "ioredis": "^5.4.1",
+    "@nestjs/platform-express": "11.0.8",
+    "ioredis": "^5.5.0",
     "lodash.isempty": "^4.4.0",
-    "oidc-provider": "^8.5.1"
+    "oidc-provider": "^8.6.1"
   }
 }
