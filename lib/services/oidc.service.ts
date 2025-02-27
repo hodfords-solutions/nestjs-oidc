@@ -129,4 +129,13 @@ export class OidcService implements OnApplicationBootstrap {
     public emitEndSessionSuccess(ctx: any) {
         ctx.oidc.provider.emit('end_session.success', ctx);
     }
+
+    public async reloadConfiguration(configuration: Promise<Record<string, any>>) {
+        this.configuration = {
+            ...this.configuration,
+            ...configuration
+        };
+
+        await this.initProvider();
+    }
 }
