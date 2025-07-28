@@ -1,6 +1,6 @@
 {
   "name": "@hodfords/nestjs-oidc",
-  "version": "11.0.3",
+  "version": "11.0.4",
   "description": "NestJS OIDC Provider",
   "license": "MIT",
   "readmeFilename": "README.md",
@@ -25,6 +25,7 @@
     "@hodfords/nestjs-prettier-config": "^11.0.1",
     "@nestjs/common": "11.0.11",
     "@nestjs/core": "11.0.11",
+    "@nestjs/swagger": "11.2.0",
     "@types/bcrypt": "^5.0.2",
     "@types/jest": "29.5.14",
     "@types/lodash.isempty": "^4.4.9",
