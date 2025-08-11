@@ -110,7 +110,7 @@ export class OidcService implements OnApplicationBootstrap {
             try {
                 await this.addClient(client);
             } catch (error) {
-                console.error(`Failed to add client ${client.clientId}:`, error);
+                console.error(`Failed to add client ${client.client_id}:`, error);
             }
         }
     }
@@ -118,7 +118,7 @@ export class OidcService implements OnApplicationBootstrap {
     private async addClient(metadata: any) {
         const provider = this.providerInstance;
         const client = new provider.Client(metadata);
-        await provider.Client.adapter.upsert(client.clientId, client.metadata());
+        await provider.Client.adapter.upsert(client.client_id, client.metadata());
 
         return client;
     }
