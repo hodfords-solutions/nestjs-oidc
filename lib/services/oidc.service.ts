@@ -90,11 +90,37 @@ export class OidcService implements OnApplicationBootstrap {
             pkce: {
                 required: () => false
             },
-            ...this.configuration
+            ...this.configuration,
+            clients: [] // NOTE: This will be populated later by addClients()
         });
 
         this.provider.proxy = true;
+        await this.addClients();
         await this.loadRevokeFnc();
+    }
+
+    private async addClients() {
+        const clients = this.configuration.clients || [];
+        if (!Array.isArray(clients) || clients.length === 0) {
+            return;
+        }
+        await this.providerInstance.Client.adapter.removeAllRegisteredClients?.();
+
+        for (const client of clients) {
+            try {
+                await this.addClient(client);
+            } catch (error) {
+                console.error(`Failed to add client ${client.clientId}:`, error);
+            }
+        }
+    }
+
+    private async addClient(metadata: any) {
+        const provider = this.providerInstance;
+        const client = new provider.Client(metadata);
+        await provider.Client.adapter.upsert(client.clientId, client.metadata());
+
+        return client;
     }
 
     private interactionConfig(policy: any) {

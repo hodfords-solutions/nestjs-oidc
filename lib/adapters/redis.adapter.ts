@@ -119,4 +119,12 @@ export class RedisAdapter {
     key(id: string) {
         return `${this.name}:${id}`;
     }
+
+    async removeAllRegisteredClients() {
+        const keys = await this.client.keys(`${this.name}:client:*`);
+
+        if (keys.length > 0) {
+            await this.client.del(...keys);
+        }
+    }
 }
