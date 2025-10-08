@@ -118,7 +118,7 @@ export class OidcService implements OnApplicationBootstrap {
     private async addClient(metadata: any) {
         const provider = this.providerInstance;
         const client = new provider.Client(metadata);
-        await provider.Client.adapter.upsert(client.client_id, client.metadata());
+        await provider.Client.adapter.upsert(client.client_id || client.clientId, client.metadata());
 
         return client;
     }
