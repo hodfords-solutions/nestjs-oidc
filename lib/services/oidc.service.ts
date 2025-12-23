@@ -8,10 +8,11 @@ import {
     OIDC_CUSTOM_INTERACTION_URL
 } from '../constants/injector.constant';
 import { ModuleRef } from '@nestjs/core';
+import type { Provider } from 'oidc-provider';
 
 @Injectable()
 export class OidcService implements OnApplicationBootstrap {
-    private provider: any;
+    private provider: Provider;
     private oidcAccountService: IAccountService;
     private revokeFnc: (ctx: any, grantId: string) => Promise<void>;
 
