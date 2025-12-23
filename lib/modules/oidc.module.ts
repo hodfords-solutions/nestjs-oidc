@@ -2,7 +2,8 @@ import { DynamicModule, Provider } from '@nestjs/common';
 import {
     OIDC_ADAPTER_REDIS_HOST,
     OIDC_CONFIGURATION,
-    OIDC_CUSTOM_INTERACTION_URL
+    OIDC_CUSTOM_INTERACTION_URL,
+    OIDC_MOUNT_PATH
 } from '../constants/injector.constant';
 import { OidcController } from '../controllers/oidc.controller';
 import { OidcAuthService } from '../services/oidc-auth.service';
@@ -22,6 +23,10 @@ export class OidcModule {
             {
                 provide: OIDC_CUSTOM_INTERACTION_URL,
                 useValue: customInteractionUrl
+            },
+            {
+                provide: OIDC_MOUNT_PATH,
+                useValue: options.mountPath
             },
             OidcService,
             OidcAuthService
