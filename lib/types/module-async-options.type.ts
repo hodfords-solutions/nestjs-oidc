@@ -1,6 +1,7 @@
 export type ModuleAsyncOptions = {
     redisHost: string;
     customInteractionUrl: string | ((uid: string) => string);
+    basePath?: string;
     configuration:
         | Record<string, any>
         | {
