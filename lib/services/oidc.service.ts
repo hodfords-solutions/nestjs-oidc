@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { RedisAdapter } from '../adapters/redis.adapter';
 import { IAccountService } from '../interfaces/account-service.interface';
@@ -5,19 +6,20 @@ import {
     OIDC_ACCOUNT_SERVICE,
     OIDC_ADAPTER_REDIS_HOST,
     OIDC_CONFIGURATION,
-    OIDC_CUSTOM_INTERACTION_URL
+    OIDC_CUSTOM_INTERACTION_URL,
+    OIDC_MOUNT_PATH
 } from '../constants/injector.constant';
 import { ModuleRef } from '@nestjs/core';
-import type { Provider } from 'oidc-provider';
 
 @Injectable()
 export class OidcService implements OnApplicationBootstrap {
-    private provider: Provider;
+    private provider: any;
     private oidcAccountService: IAccountService;
     private revokeFnc: (ctx: any, grantId: string) => Promise<void>;
 
     constructor(
         @Inject(OIDC_CONFIGURATION) private configuration: Record<string, any>,
+        @Inject(OIDC_MOUNT_PATH) private mountPath: string,
         @Inject(OIDC_ADAPTER_REDIS_HOST) private redisHost: string,
         @Inject(OIDC_CUSTOM_INTERACTION_URL)
         private customInteractionUrl: (uid: string) => string | string,
@@ -96,8 +98,18 @@ export class OidcService implements OnApplicationBootstrap {
         });
 
         this.provider.proxy = true;
+
+        const mountPath = this.mountPath || '/user-services/oidc';
+        this.setupUrlForOverride(mountPath);
         await this.addClients();
         await this.loadRevokeFnc();
+    }
+
+    private setupUrlForOverride(mountPath: string) {
+        const originalUrlFor = this.provider.OIDCContext.prototype.urlFor;
+        this.provider.OIDCContext.prototype.urlFor = function (name: string, opt: any) {
+            return originalUrlFor.call(this, name, { mountPath, ...opt });
+        };
     }
 
     private async addClients() {

@@ -1,10 +1,9 @@
 import { DynamicModule, Provider } from '@nestjs/common';
-import { PATH_METADATA } from '@nestjs/common/constants';
 import {
     OIDC_ADAPTER_REDIS_HOST,
-    OIDC_BASE_PATH,
     OIDC_CONFIGURATION,
-    OIDC_CUSTOM_INTERACTION_URL
+    OIDC_CUSTOM_INTERACTION_URL,
+    OIDC_MOUNT_PATH
 } from '../constants/injector.constant';
 import { OidcController } from '../controllers/oidc.controller';
 import { OidcAuthService } from '../services/oidc-auth.service';
@@ -15,10 +14,6 @@ export class OidcModule {
     public static forRootAsync(options: ModuleAsyncOptions): DynamicModule {
         const redisHost = options.redisHost;
         const customInteractionUrl = options.customInteractionUrl;
-        const basePath = options.basePath || 'user-services/oidc';
-
-        // Dynamically set the controller path
-        Reflect.defineMetadata(PATH_METADATA, basePath, OidcController);
 
         const providers: Provider[] = [
             {
@@ -30,8 +25,8 @@ export class OidcModule {
                 useValue: customInteractionUrl
             },
             {
-                provide: OIDC_BASE_PATH,
-                useValue: basePath
+                provide: OIDC_MOUNT_PATH,
+                useValue: options.mountPath
             },
             OidcService,
             OidcAuthService
