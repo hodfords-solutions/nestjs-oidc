@@ -120,6 +120,7 @@ class ConfigModule {}
         ConfigModule,
         OidcModule.forRootAsync({
             redisHost: 'localhost',
+            mountPath: '/oidc',
             customInteractionUrl: 'http://localhost:3001/interaction/{uid}',
             configuration: {
                 useFactory: (configService: ConfigService) => configService.getConfig(),
