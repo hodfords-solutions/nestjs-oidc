@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { IAccountService, OIDC_ACCOUNT_SERVICE, OidcModule } from '@mint/nestjs-oidc';
 import { Injectable, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { AppController } from './app.controller.js';
 
 @Injectable()
 class UserService {}

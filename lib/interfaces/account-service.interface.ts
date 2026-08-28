@@ -1,4 +1,4 @@
-import { IAccount } from './account.interface';
+import { IAccount } from './account.interface.js';
 import { Request, Response } from 'express';
 
 export interface IAccountService {

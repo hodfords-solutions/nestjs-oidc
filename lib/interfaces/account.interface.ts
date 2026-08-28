@@ -1,4 +1,4 @@
-import { AccountClaimsType } from '../types/account.type';
+import { AccountClaimsType } from '../types/account.type.js';
 
 export interface IAccount {
     accountId: string;
