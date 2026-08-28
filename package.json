@@ -28,7 +28,6 @@
         "@nestjs/swagger": "12.0.0",
         "@swc/core": "^1.13.5",
         "@types/bcrypt": "^6.0.0",
-        "@types/lodash.isempty": "^4.4.9",
         "@types/node": "25.2.0",
         "@types/oidc-provider": "9.5.0",
         "cspell": "9.6.3",
@@ -36,7 +35,6 @@
         "husky": "9.1.7",
         "is-ci": "4.1.0",
         "lint-staged": "16.2.7",
-        "lodash": "4.17.23",
         "openid-client": "6.8.1",
         "prettier": "3.8.1",
         "reflect-metadata": "0.2.2",
@@ -64,12 +62,9 @@
     },
     "dependencies": {
         "@nestjs/platform-express": "12.0.1",
+        "es-toolkit": "1.51.0",
         "ioredis": "^5.9.2",
-        "lodash.isempty": "^4.4.0",
         "oidc-provider": "9.6.0"
-    },
-    "overrides": {
-        "lodash": "4.17.23"
     },
     "type": "module",
     "main": "./index.js",

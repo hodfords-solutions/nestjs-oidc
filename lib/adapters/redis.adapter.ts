@@ -1,5 +1,5 @@
 import { Redis } from 'ioredis';
-import isEmpty from 'lodash.isempty';
+import { isEmpty } from 'es-toolkit/compat';
 
 const grantable = new Set([
     'AccessToken',
