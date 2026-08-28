@@ -4,11 +4,11 @@ import {
     OIDC_CONFIGURATION,
     OIDC_CUSTOM_INTERACTION_URL,
     OIDC_MOUNT_PATH
-} from '../constants/injector.constant';
-import { OidcController } from '../controllers/oidc.controller';
-import { OidcAuthService } from '../services/oidc-auth.service';
-import { OidcService } from '../services/oidc.service';
-import { ModuleAsyncOptions } from '../types/module-async-options.type';
+} from '../constants/injector.constant.js';
+import { OidcController } from '../controllers/oidc.controller.js';
+import { OidcAuthService } from '../services/oidc-auth.service.js';
+import { OidcService } from '../services/oidc.service.js';
+import { ModuleAsyncOptions } from '../types/module-async-options.type.js';
 
 export class OidcModule {
     public static forRootAsync(options: ModuleAsyncOptions): DynamicModule {

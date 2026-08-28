@@ -4,8 +4,24 @@
 
 NestJS-OIDC is easy way to turn our server as oidc provider with minimum configuratiohn
 
+## Requirements
+
+-   **Node.js** `>=20.19.0` (or `>=22.12`, `>=24.15`, `>=26`)
+-   **NestJS 12** — this package targets `@nestjs/common` / `@nestjs/core` v12.
+-   This package is **ESM-only**. It ships as `"type": "module"` and can only be loaded with
+    `import` (or `await import(...)`), not with `require()`.
+
+| `@hodfords/nestjs-oidc` | NestJS  |
+| ----------------------- | ------- |
+| `12.x`                  | `12.x`  |
+| `11.x`                  | `11.x`  |
+
 ## Installation
 This package is using redis as adapter to store authentication session and relevant stuffs, so you need to have install redis first
+
+```bash
+npm install @hodfords/nestjs-oidc
+```
 
 ### Register module
 This is setup to register essential configuration for OIDC provider such as (client, ttls, cookies,...). You can get more at [OIDC Provider](https://github.com/panva/node-oidc-provider/tree/main/docs)

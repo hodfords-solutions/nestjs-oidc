@@ -1,14 +1,14 @@
 /* eslint-disable max-lines-per-function */
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { RedisAdapter } from '../adapters/redis.adapter';
-import { IAccountService } from '../interfaces/account-service.interface';
+import { RedisAdapter } from '../adapters/redis.adapter.js';
+import { IAccountService } from '../interfaces/account-service.interface.js';
 import {
     OIDC_ACCOUNT_SERVICE,
     OIDC_ADAPTER_REDIS_HOST,
     OIDC_CONFIGURATION,
     OIDC_CUSTOM_INTERACTION_URL,
     OIDC_MOUNT_PATH
-} from '../constants/injector.constant';
+} from '../constants/injector.constant.js';
 import { ModuleRef } from '@nestjs/core';
 
 @Injectable()
@@ -52,7 +52,7 @@ export class OidcService implements OnApplicationBootstrap {
     }
 
     private async initProvider() {
-        const oidcProvider = await (eval(`import('oidc-provider')`) as Promise<typeof import('oidc-provider')>);
+        const oidcProvider = await import('oidc-provider');
         const policy = oidcProvider.interactionPolicy;
 
         this.configuration.findAccount = this.oidcAccountService.findAccount.bind(this.oidcAccountService);
@@ -152,7 +152,10 @@ export class OidcService implements OnApplicationBootstrap {
     }
 
     private async loadRevokeFnc(): Promise<void> {
-        const revokeFnc = await eval(`import('oidc-provider/lib/helpers/revoke.js')`);
+        // NOTE: deep import into an untyped subpath - the specifier is kept in a variable so that
+        // TypeScript does not try to resolve declaration files that @types/oidc-provider does not ship.
+        const revokeModulePath = 'oidc-provider/lib/helpers/revoke.js';
+        const revokeFnc = await import(revokeModulePath);
 
         this.revokeFnc = revokeFnc.default;
     }

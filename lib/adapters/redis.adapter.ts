@@ -1,4 +1,4 @@
-import Redis from 'ioredis';
+import { Redis } from 'ioredis';
 import isEmpty from 'lodash.isempty';
 
 const grantable = new Set([

@@ -1,6 +1,6 @@
 import { All, Controller, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { OidcService } from '../services/oidc.service';
+import { OidcService } from '../services/oidc.service.js';
 
 @Controller('oidc')
 export class OidcController {

@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { Request, Response } from 'express';
-import { OIDC_ACCOUNT_SERVICE } from '../constants/injector.constant';
-import { IAccountService } from '../interfaces/account-service.interface';
-import { OidcService } from './oidc.service';
-import { OidcPromptEnums } from '../enums/odic.constant';
+import { OIDC_ACCOUNT_SERVICE } from '../constants/injector.constant.js';
+import { IAccountService } from '../interfaces/account-service.interface.js';
+import { OidcService } from './oidc.service.js';
+import { OidcPromptEnums } from '../enums/odic.constant.js';
 
 @Injectable()
 export class OidcAuthService implements OnApplicationBootstrap {
