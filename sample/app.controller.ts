@@ -1,4 +1,4 @@
-import { OidcAuthService, OidcService } from '@mint/nestjs-oidc';
+import { OidcAuthService, OidcService } from '../lib/index.js';
 import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { Request } from 'express';

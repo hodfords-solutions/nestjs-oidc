@@ -1,6 +1,6 @@
 {
     "name": "@hodfords/nestjs-oidc",
-    "version": "12.0.0",
+    "version": "12.0.1",
     "description": "NestJS OIDC Provider",
     "license": "MIT",
     "readmeFilename": "README.md",
@@ -46,7 +46,7 @@
     },
     "scripts": {
         "prebuild": "rimraf dist",
-        "start:dev": "npm run prebuild && nest start --watch",
+        "start:dev": "npm run prebuild && nest start --watch -p tsconfig.sample.json",
         "start": "tsx sample/main.ts",
         "build": "tsc --project tsconfig.prod.json && cp package.json dist && cp README.md dist && cp .npmrc dist",
         "deploy": "npm run build && npm publish dist",
