@@ -4,3 +4,6 @@ sample/**/*.js
 sample/**/*.js.map
 sample/node_modules/
 .DS_Store
+
+# TypeScript incremental build info (TS6 writes it next to tsconfig)
+*.tsbuildinfo
