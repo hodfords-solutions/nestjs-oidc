@@ -1,6 +1,6 @@
 {
     "name": "@hodfords/nestjs-oidc",
-    "version": "12.0.1",
+    "version": "12.1.0",
     "description": "NestJS OIDC Provider",
     "license": "MIT",
     "readmeFilename": "README.md",
@@ -40,12 +40,12 @@
         "reflect-metadata": "0.2.2",
         "rimraf": "6.1.2",
         "tsx": "^4.20.6",
-        "typescript": "5.9.3",
+        "typescript": "6.0.3",
         "unplugin-swc": "^1.5.7",
         "vitest": "^4.1.10"
     },
     "scripts": {
-        "prebuild": "rimraf dist",
+        "prebuild": "rimraf dist *.tsbuildinfo",
         "start:dev": "npm run prebuild && nest start --watch -p tsconfig.sample.json",
         "start": "tsx sample/main.ts",
         "build": "tsc --project tsconfig.prod.json && cp package.json dist && cp README.md dist && cp .npmrc dist",
