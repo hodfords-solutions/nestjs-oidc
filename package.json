@@ -1,6 +1,6 @@
 {
     "name": "@hodfords/nestjs-oidc",
-    "version": "12.1.0",
+    "version": "12.2.0",
     "description": "NestJS OIDC Provider",
     "license": "MIT",
     "readmeFilename": "README.md",
@@ -25,6 +25,7 @@
         "@hodfords/nestjs-prettier-config": "^11.0.1",
         "@nestjs/common": "12.0.1",
         "@nestjs/core": "12.0.1",
+        "@nestjs/platform-express": "12.0.1",
         "@nestjs/swagger": "12.0.0",
         "@swc/core": "^1.13.5",
         "@types/bcrypt": "^6.0.0",
@@ -44,6 +45,16 @@
         "unplugin-swc": "^1.5.7",
         "vitest": "^4.1.10"
     },
+    "peerDependencies": {
+        "@nestjs/common": ">=12.0.0",
+        "@nestjs/core": ">=12.0.0",
+        "express": ">=5.0.0"
+    },
+    "peerDependenciesMeta": {
+        "express": {
+            "optional": true
+        }
+    },
     "scripts": {
         "prebuild": "rimraf dist *.tsbuildinfo",
         "start:dev": "npm run prebuild && nest start --watch -p tsconfig.sample.json",
@@ -61,7 +72,6 @@
         "test:cov": "vitest run --coverage"
     },
     "dependencies": {
-        "@nestjs/platform-express": "12.0.1",
         "es-toolkit": "1.51.0",
         "ioredis": "^5.9.2",
         "oidc-provider": "9.6.0"
