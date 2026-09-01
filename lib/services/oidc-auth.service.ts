@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { OIDC_ACCOUNT_SERVICE } from '../constants/injector.constant.js';
 import { IAccountService } from '../interfaces/account-service.interface.js';
 import { OidcService } from './oidc.service.js';

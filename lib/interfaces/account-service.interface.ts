@@ -1,5 +1,5 @@
 import { IAccount } from './account.interface.js';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 export interface IAccountService {
     findAccount(ctx: any, id: string): Promise<IAccount>;
